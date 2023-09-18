@@ -3,33 +3,35 @@ package data;
 import java.io.Serializable;
 
 public class WordDynamicArray implements Serializable {
-    private String[] randomWords = new String[0];
+    public String[] randomWords;
 
-    public void add(String randomWord) {
-        String[] newRandomWords = new String[randomWord.length() + 1];
+    public WordDynamicArray() {
+        randomWords = new String[0];
+    }
+
+
+    public void add(String word) {
+        String[] newWords = new String[randomWords.length + 1];
+
         for (int i = 0; i < randomWords.length; i++) {
-            newRandomWords[i] = randomWords[i];
+            newWords[i] = randomWords[i];
         }
+        newWords[randomWords.length] = word;
 
-        newRandomWords[newRandomWords.length - 1] = randomWord;
-        randomWords = newRandomWords;
+        randomWords = newWords;
+
     }
 
     public String get(int index) {
         if (index < 0 || index >= randomWords.length) {
-            System.out.println("Index is wrong!");
-            return null;
-        } else {
-            return randomWords[index];
+            throw new IllegalArgumentException();
         }
-    }
+        return randomWords[index];
 
-    public int size() {
+    }
+    public int getSize() {
+
         return randomWords.length;
-    }
-
-    public String[] getAllWords() {
-        return randomWords;
     }
 }
 

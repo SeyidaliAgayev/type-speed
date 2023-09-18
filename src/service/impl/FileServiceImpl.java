@@ -8,9 +8,17 @@ import java.io.*;
 
 public class FileServiceImpl implements FileServiceInter, Serializable {
 
+    public static FileServiceImpl instance = null;
+    private FileServiceImpl() {
+    }
+
+    public static FileServiceImpl getInstance() {
+        return instance == null ? instance = new FileServiceImpl() : instance;
+    }
+
     @Override
-    public void saveAllWords(String fileName, String[] randomWord) {
-        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+    public void saveAllWords(String fileName, String randomWord) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName, true);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)
         ) {
 
@@ -25,22 +33,19 @@ public class FileServiceImpl implements FileServiceInter, Serializable {
 
     @Override
     public WordDynamicArray readAllWords(String fileName) {
-        try (FileInputStream fileInputStream = new FileInputStream(fileName);
-             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        ) {
-            WordDynamicArray wordDynamicArray = (WordDynamicArray) objectInputStream.readObject();
-
-            return wordDynamicArray;
-
+        try {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String s;
+            while ((s = bufferedReader.readLine()) != null) {
+                GlobalData.wordDynamicArray.add(s);
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
         return null;
 
     }
 }
 
-//
 
